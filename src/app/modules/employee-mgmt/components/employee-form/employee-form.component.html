@@ -1,0 +1,80 @@
+<div class="container">
+  <h2></h2>
+  <mat-toolbar>
+    <div class="mat-toolbar-tools">
+      <h2>Employee Form</h2>
+    </div>
+  </mat-toolbar>
+
+  <mat-card>
+    <p>
+      <span class="asterik"> *</span> Fields are mandatory</p>
+    <form #employeeForm='ngForm' (ngSubmit)="onSubmit()" novalidate>
+      <div class="form-group">
+        <label>Name</label>
+          <span class="asterik"> *  </span>  
+        <mat-form-field>          
+          <input type="text" class="form-control" name="name" [(ngModel)]="emp.name" required #nameRef="ngModel"
+            minlength="4" pattern="[a-zA-Z][a-zA-Z ]+" matInput/>
+        </mat-form-field>
+        <div *ngIf="nameRef.errors && (nameRef.dirty || nameRef.touched)" class="alert alert-danger">
+          <div [hidden]="!nameRef.errors.required">
+            Please enter a name
+          </div>
+          <div [hidden]="!nameRef.errors.minlength">
+            Please enter atleast 4 characters
+          </div>
+          <div [hidden]="!nameRef.errors.pattern">
+            Please enter only alphabets only
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Phone
+          <span class="asterik"> * </span>
+        </label>
+        <mat-form-field>
+          <input type="text" class="form-control" name="mobile" [(ngModel)]="emp.phone" pattern="^((\\+91-?)|0)?[0-9]{10}$"
+            #mobileRef="ngModel" required matInput/>
+        </mat-form-field>
+        <div *ngIf="mobileRef.errors && (mobileRef.dirty || mobileRef.touched)" class="alert alert-danger">
+          <div [hidden]="!mobileRef.errors.required">
+            Please enter a mobile number
+          </div>
+          <div [hidden]="!mobileRef.errors.pattern">
+            Please enter 10 digits numbers
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" ngModelGroup="address">
+        <label>City : </label>
+        <mat-form-field>
+          <input type="text" class="form-control" name="city" [(ngModel)]="emp.address.city" #cityRef="ngModel"
+            matInput/>
+        </mat-form-field>
+        <br/>
+        <label>Address 1 : </label>
+        <mat-form-field>
+          <input type="text" class="form-control" name="address1" [(ngModel)]="emp.address.address_line1" #address1Ref="ngModel"
+            matInput />
+        </mat-form-field>
+        <br/>
+        <label>Address 2 :</label>
+        <mat-form-field>
+          <input type="text" class="form-control" name="address2" [(ngModel)]="emp.address.address_line2" #address2Ref="ngModel"
+            matInput />
+        </mat-form-field>
+        <br/>
+        <label>Postal code : </label>
+        <mat-form-field>
+          <input name="pincode" [(ngModel)]="emp.address.postal_code" type="text" matInput>
+        </mat-form-field>
+      </div>
+
+      <button type="submit" mat-raised-button color="warn" [disabled]="!employeeForm.form.valid">Submit</button>
+      <button mat-raised-button color="default" (click)="onCancel()">Cancel</button>
+    </form>
+  </mat-card>
+</div>

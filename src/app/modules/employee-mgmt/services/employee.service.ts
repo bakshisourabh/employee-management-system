@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 
 import { Employee, IEmployee } from './../types/models/entities/employee';
@@ -69,6 +69,57 @@ export class EmployeeService {
       .catch((error: Response) => {
         return Observable.throw(error || 'Server error');
       });
+  }
+
+  public add(employee: Employee): Observable<Employee> {
+    const result: Subject<Employee> = new Subject();
+
+    setTimeout(() => {
+      const oldList: Array<Employee> = this.employeesSub.getValue();
+      const newList: Array<Employee> = oldList.concat(employee).slice();
+
+      employee.id = oldList.length + 1;
+      this.employeesSub.next(newList);
+
+      return result.next(employee);
+    }, 500);
+
+    return result.asObservable();
+  }
+
+  public update(employee: Employee): Observable<Employee> {
+    const result: Subject<Employee> = new Subject();
+
+    setTimeout(() => {
+      const oldList: Array<Employee> = this.employeesSub.getValue();
+      const index: number = oldList.findIndex(
+        (emp: Employee, pos: number, list: Array<Employee>) => {
+          return emp.id === employee.id;
+        }
+      );
+
+      oldList[index] = employee;
+      this.employeesSub.next(oldList.slice());
+
+      return result.next(employee);
+    }, 500);
+
+    return result.asObservable();
+  }
+
+  public get(empId: number): Employee {
+    let result: Employee;
+
+    empId = +empId;
+    result = this.employeesSub.value.find((emp: Employee) => {
+      return emp.id === empId;
+    });
+
+    return result;
+  }
+
+  public edit(empId: number): Employee {
+    return this.get(empId).clone();
   }
 
   public setFilter(value: string): void {

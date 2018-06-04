@@ -21,7 +21,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
     'address_line1',
     'address_line2',
     'city',
-    'postal_code'
+    'postal_code',
+    'edit'
   ];
 
   private _filter: string;
@@ -54,6 +55,10 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.filterChange.unsubscribe();
+  }
+
+  public OnEdit(empId: number): void {
+    this.router.navigateByUrl(`/employees/${empId}/edit`);
   }
 
   public getPhoneNumber(emp: Employee): string {

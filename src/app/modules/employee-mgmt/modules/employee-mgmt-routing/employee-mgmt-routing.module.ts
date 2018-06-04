@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { EmployeeListComponent } from '../../components/employee-list/employee-list.component';
 import { EmployeeModuleGuardService } from '../../services/employee-module-guard.service';
+import { EmployeeFormComponent } from './../../components/employee-form/employee-form.component';
 
 @NgModule({
   imports: [
@@ -14,8 +15,9 @@ import { EmployeeModuleGuardService } from '../../services/employee-module-guard
         canActivate: [EmployeeModuleGuardService],
         children: [
           { path: '', redirectTo: 'list' },
-          { path: 'list', component: EmployeeListComponent }
-          
+          { path: 'list', component: EmployeeListComponent },
+          { path: 'add', component: EmployeeFormComponent },
+          { path: ':empId/edit', component: EmployeeFormComponent }
         ]
       }
     ])
