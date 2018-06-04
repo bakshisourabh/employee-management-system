@@ -1,3 +1,8 @@
+<mat-form-field>
+  <input type="text" class="form-control" name="filter" ngModel required #filterRef="ngModel" matInput
+    placeholder="Search by city or name" />
+</mat-form-field>
+
 <table mat-table [dataSource]="employees | async" class="mat-elevation-z8">
 
   <ng-container matColumnDef="id">
@@ -38,4 +43,3 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-

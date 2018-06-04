@@ -13,26 +13,52 @@ import { Employee } from './../../types/models/entities/employee';
   styleUrls: ['./employee-list.component.css']
 })
 export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
-  public displayedColumns = ['id', 'name', 'phone', 'address_line1', 'address_line2','city','postal_code'];
+  @ViewChild('filterRef') filterRef: NgControl;
+  public displayedColumns = [
+    'id',
+    'name',
+    'phone',
+    'address_line1',
+    'address_line2',
+    'city',
+    'postal_code'
+  ];
 
+  private _filter: string;
+  private filterChange: Subscription;
+
+  get filter(): string {
+    return this._filter;
+  }
+
+  set filter(value: string) {
+    this._filter = value;
+    this.es.setFilter(value);
+  }
 
   public employees: Observable<Array<Employee>>;
 
   constructor(private es: EmployeeService, private router: Router) {}
 
   ngOnInit() {
-    this.employees = this.es.employees;
+    this.employees = this.es.filteredEmployees;
   }
 
   ngAfterViewInit(): void {
+    this.filterChange = this.filterRef.valueChanges
+      .debounceTime(500)
+      .subscribe(value => {
+        this.filter = value;
+      });
   }
 
   ngOnDestroy(): void {
+    this.filterChange.unsubscribe();
   }
 
-  public getPhoneNumber(emp : Employee):string{
-    if(isNaN (parseInt(emp.phone))){
-      return "NA";
+  public getPhoneNumber(emp: Employee): string {
+    if (isNaN(parseInt(emp.phone))) {
+      return 'NA';
     }
     return emp.phone;
   }
